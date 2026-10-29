@@ -1,0 +1,117 @@
+# Manual requests for the Hotel Terror service. Run against a local `cds watch`.
+#
+# alice is a built-in mock dev user (admin) with no password from the default
+# `auth: mocked` profile; not a secret, local development only.
+
+@baseUrl = http://localhost:4004/hotel
+@auth = Basic alice:
+
+### Service document
+GET {{baseUrl}}/
+Authorization: {{auth}}
+
+### Metadata (confirm draft annotations and value lists)
+GET {{baseUrl}}/$metadata
+Authorization: {{auth}}
+
+### Bookings with guest and room expanded
+GET {{baseUrl}}/Bookings?$expand=guest,room&$top=5
+Authorization: {{auth}}
+
+### Guests
+GET {{baseUrl}}/Guests?$top=5
+Authorization: {{auth}}
+
+### Rooms
+GET {{baseUrl}}/Rooms?$top=5
+Authorization: {{auth}}
+
+### Code lists (value helps and display)
+GET {{baseUrl}}/Species
+Authorization: {{auth}}
+
+###
+GET {{baseUrl}}/BookingStatuses
+Authorization: {{auth}}
+
+###
+GET {{baseUrl}}/IncidentTypes
+Authorization: {{auth}}
+
+###
+GET {{baseUrl}}/Extras
+Authorization: {{auth}}
+
+### Analytics - revenue by period
+GET {{baseUrl}}/RevenueByPeriod
+Authorization: {{auth}}
+
+### Analytics - revenue vs target
+GET {{baseUrl}}/RevenueVsTarget
+Authorization: {{auth}}
+
+### Analytics - incidents by species
+GET {{baseUrl}}/IncidentsBySpecies
+Authorization: {{auth}}
+
+### Analytics - room ranking
+GET {{baseUrl}}/RoomRanking
+Authorization: {{auth}}
+
+# ----------------------------------------------------------------------------
+# Draft round-trip on Bookings: create -> edit -> activate -> read.
+# ----------------------------------------------------------------------------
+
+### Create a draft booking
+# @name createDraft
+POST {{baseUrl}}/Bookings
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "guest_ID": "11111111-1111-1111-1111-000000000003",
+  "room_number": "BT-1",
+  "checkIn": "2026-07-28",
+  "checkOut": "2026-07-31"
+}
+
+### Edit a field on the draft
+PATCH {{baseUrl}}/Bookings(ID={{createDraft.response.body.$.ID}},IsActiveEntity=false)
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "checkOut": "2026-08-01"
+}
+
+### Activate the draft
+POST {{baseUrl}}/Bookings(ID={{createDraft.response.body.$.ID}},IsActiveEntity=false)/HotelService.draftActivate
+Authorization: {{auth}}
+Content-Type: application/json
+
+{}
+
+### Read the active booking
+GET {{baseUrl}}/Bookings(ID={{createDraft.response.body.$.ID}},IsActiveEntity=true)
+Authorization: {{auth}}
+
+# ----------------------------------------------------------------------------
+# Negative checks.
+# ----------------------------------------------------------------------------
+
+### No credentials -> expect 401
+GET {{baseUrl}}/Bookings
+
+### Client-supplied totalAmount is ignored (amount fields are @readonly)
+# @name readonlyProbe
+POST {{baseUrl}}/Bookings
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "guest_ID": "11111111-1111-1111-1111-000000000003",
+  "room_number": "BT-1",
+  "checkIn": "2026-09-25",
+  "checkOut": "2026-09-27",
+  "totalAmount": 99999.00
+}

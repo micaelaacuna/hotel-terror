@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "@cap-js/postgres": "^3",
-    "@sap/cds": "^10"
+    "@sap/cds": "^10",
+    "astronomy-engine": "^2.1.19"
   },
   "devDependencies": {
     "@cap-js/cds-test": "^1.0.2",
