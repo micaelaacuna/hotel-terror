@@ -1,0 +1,7 @@
+code,name,descr,icon
+noise,Noise,Excessive noise complaint,sap-icon://bell
+damage,Damage,Physical damage to the room,sap-icon://wrench
+haunting,Haunting,Unrequested supernatural activity,sap-icon://feedback
+fullMoon,Full moon,Full-moon related disturbance,sap-icon://circle-task-2
+complaint,Complaint,General guest complaint,sap-icon://email
+petrification,Petrification,Guest or staff turned to stone,sap-icon://locked

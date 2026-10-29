@@ -1,0 +1,6 @@
+code,name,descr,color
+requested,Requested,Awaiting confirmation,Indication05
+confirmed,Confirmed,Reserved and confirmed,Indication04
+checkedIn,Checked in,Guest currently staying,Indication03
+checkedOut,Checked out,Stay completed,Indication06
+cancelled,Cancelled,Booking cancelled,Indication02

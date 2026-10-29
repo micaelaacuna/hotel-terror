@@ -1,0 +1,6 @@
+locale,code,name,descr
+es,requested,Solicitada,Pendiente de confirmación
+es,confirmed,Confirmada,Reservada y confirmada
+es,checkedIn,Registrada,Huésped alojado actualmente
+es,checkedOut,Finalizada,Estancia completada
+es,cancelled,Cancelada,Reserva cancelada

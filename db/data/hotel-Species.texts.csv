@@ -1,0 +1,12 @@
+locale,code,name,descr
+es,vampire,Vampiro,Bebedor de sangre nocturno que debe evitar la luz del día
+es,werewolf,Hombre lobo,Cambiaformas que se transforma con la luna llena
+es,ghost,Fantasma,Espíritu incorpóreo ligado a un lugar
+es,mummy,Momia,Muerto antiguo preservado al que no le gusta la humedad
+es,yeti,Yeti,Habitante de la montaña que necesita habitaciones heladas
+es,witch,Bruja,Practicante de magia popular
+es,gorgon,Gorgona,Ser de cabello de serpientes cuya mirada convierte en piedra
+es,construct,Engendro,Ser reanimado ensamblado a partir de piezas
+es,spectre,Espectro,Jinete fantasmal que acecha en la noche
+es,invisible,Invisible,Presencia inadvertida visible solo por sus efectos
+es,cursedHuman,Humano maldito,Humano que vive bajo una aflicción sobrenatural

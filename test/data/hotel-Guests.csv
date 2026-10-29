@@ -1,0 +1,16 @@
+ID,name,species_code,homeRealm,sourceWork,firstAppearance,isVip
+11111111-1111-1111-1111-000000000001,Count Dracula,vampire,Transylvania,Dracula (Bram Stoker),1897,true
+11111111-1111-1111-1111-000000000002,Carmilla Karnstein,vampire,Styria,Carmilla (J. Sheridan Le Fanu),1872,false
+11111111-1111-1111-1111-000000000003,Bisclavret,werewolf,Brittany,Bisclavret (Marie de France),1180,false
+11111111-1111-1111-1111-000000000004,Sir Simon de Canterville,ghost,England,The Canterville Ghost (Oscar Wilde),1887,false
+11111111-1111-1111-1111-000000000005,Erik,ghost,Paris,The Phantom of the Opera (Gaston Leroux),1910,false
+11111111-1111-1111-1111-000000000006,Edward Hyde,cursedHuman,London,Strange Case of Dr Jekyll and Mr Hyde (Stevenson),1886,false
+11111111-1111-1111-1111-000000000007,Dorian Gray,cursedHuman,London,The Picture of Dorian Gray (Oscar Wilde),1890,true
+11111111-1111-1111-1111-000000000008,Roderick Usher,cursedHuman,New England,The Fall of the House of Usher (Edgar Allan Poe),1839,false
+11111111-1111-1111-1111-000000000009,Griffin,invisible,England,The Invisible Man (H. G. Wells),1897,false
+11111111-1111-1111-1111-000000000010,The Headless Horseman,spectre,Sleepy Hollow,The Legend of Sleepy Hollow (Washington Irving),1820,false
+11111111-1111-1111-1111-000000000011,The Creature,construct,Ingolstadt,Frankenstein (Mary Shelley),1818,false
+11111111-1111-1111-1111-000000000012,Baba Yaga,witch,Slavic forest,Slavic folklore,,false
+11111111-1111-1111-1111-000000000013,Medusa,gorgon,Ancient Greece,Greek mythology,,false
+11111111-1111-1111-1111-000000000014,Nefer-Ankh,mummy,Egypt,Original character,,false
+11111111-1111-1111-1111-000000000015,Migou,yeti,Himalayas,Himalayan folklore,,false

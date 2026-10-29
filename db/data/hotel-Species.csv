@@ -1,0 +1,12 @@
+code,name,descr,color,icon,sunTolerant,maxRoomTemp,riskLevel,fullMoonSensitive
+vampire,Vampire,Nocturnal blood-drinker that must avoid daylight,Indication01,sap-icon://drop,false,,4,false
+werewolf,Werewolf,Shapeshifter that transforms under the full moon,Indication03,sap-icon://feeder-arrow,true,,4,true
+ghost,Ghost,Incorporeal spirit bound to a place,Indication05,sap-icon://feedback,true,,2,false
+mummy,Mummy,Preserved ancient dead that hates damp,Indication06,sap-icon://history,true,,3,false
+yeti,Yeti,Mountain dweller that needs freezing rooms,Indication07,sap-icon://cloud,true,0,3,false
+witch,Witch,Practitioner of folk magic,Indication08,sap-icon://lab,true,,3,true
+gorgon,Gorgon,Serpent-haired being whose gaze turns flesh to stone,Indication02,sap-icon://visits,true,,5,false
+construct,Construct,Reanimated being assembled from spare parts,Indication04,sap-icon://wrench,true,,3,false
+spectre,Spectre,Phantom rider that haunts the night,Indication01,sap-icon://travel-request,false,,3,false
+invisible,Invisible,Unseen presence visible only by its effects,Indication05,sap-icon://hide,true,,3,false
+cursedHuman,Cursed Human,A human living under a supernatural affliction,Indication06,sap-icon://person-placeholder,true,,2,false

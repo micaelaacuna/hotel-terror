@@ -3,27 +3,84 @@
   "version": "1.0.0",
   "description": "Reception desk app for a hotel of classic monsters, built on CAP, TypeScript and PostgreSQL.",
   "license": "MIT",
-  "type": "module",
   "engines": {
     "node": ">=20"
   },
   "dependencies": {
+    "@cap-js/postgres": "^3",
     "@sap/cds": "^10"
   },
   "devDependencies": {
+    "@cap-js/cds-test": "^1.0.2",
     "@cap-js/cds-typer": "^0.41.0",
     "@cap-js/cds-types": "^0.18.0",
     "@cap-js/sqlite": "^3",
+    "@eslint/js": "^10.0.1",
     "@sap/cds-dk": "^10",
+    "@swc/core": "^1.16.20",
+    "@swc/jest": "^0.2.39",
     "@types/node": "^22.0.0",
+    "eslint": "^10.13.0",
+    "jest": "^30.5.2",
     "tsx": "^4",
     "typescript": "^5"
   },
   "scripts": {
-    "start": "cds-serve"
+    "start": "cds w",
+    "watch": "cds watch",
+    "test": "jest",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "login": "cf login -a https://api.cf.us10-001.hana.ondemand.com --sso"
   },
   "private": true,
   "imports": {
     "#cds-models/*": "./@cds-models/*/index.js"
+  },
+  "jest": {
+    "setupFiles": [
+      "<rootDir>/test/jest.setup.js"
+    ],
+    "transform": {
+      "^.+\\.(t|j)s$": "@swc/jest"
+    },
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/gen/"
+    ],
+    "passWithNoTests": true
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "credentials": {
+          "url": ":memory:"
+        }
+      },
+      "queue": false,
+      "auth": "mocked"
+    },
+    "[test]": {
+      "requires": {
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "url": ":memory:"
+          }
+        }
+      }
+    },
+    "[hybrid]": {
+      "requires": {
+        "db": "postgres"
+      }
+    },
+    "[production]": {
+      "requires": {
+        "db": "postgres",
+        "auth": "xsuaa"
+      }
+    }
   }
 }

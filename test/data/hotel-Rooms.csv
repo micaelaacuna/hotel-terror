@@ -1,0 +1,15 @@
+number,name,floor,sunExposure,temperature,capacity,nightlyRate
+C-1,Crypt C-1,-1,none,12,1,80.00
+C-2,Crypt C-2,-1,none,11,1,80.00
+C-3,Crypt C-3,-1,none,10,2,95.00
+13,Room 13,1,none,18,1,70.00
+104,Suite with sea view,1,full,22,2,150.00
+105,Garden Room,1,partial,21,2,110.00
+207,Attic 207,2,partial,16,1,90.00
+210,Twilight Suite,2,partial,19,2,130.00
+ICE-1,Glacier Suite,-1,none,-5,2,140.00
+B-02,Boiler Room B-02,-2,none,30,1,60.00
+SW-1,Swamp Suite,0,partial,20,2,120.00
+BT-1,Bell Tower,3,full,15,1,100.00
+P-B,Parking Bay P-B,-2,none,14,1,40.00
+301,Moonlit Suite,3,full,23,2,160.00
