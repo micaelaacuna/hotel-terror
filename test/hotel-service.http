@@ -115,3 +115,128 @@ Content-Type: application/json
   "checkOut": "2026-09-27",
   "totalAmount": 99999.00
 }
+
+# ----------------------------------------------------------------------------
+# Booking validation: rules fire on draft activation, not on field edits.
+# Each block creates a draft, then activates it to trigger the handler.
+# ----------------------------------------------------------------------------
+
+### R2 reject - vampire into a full-sun room: activation -> 400 SUN_INCOMPATIBLE
+# @name vampireFullSun
+POST {{baseUrl}}/Bookings
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "guest_ID": "11111111-1111-1111-1111-000000000001",
+  "room_number": "104",
+  "checkIn": "2027-04-10",
+  "checkOut": "2027-04-13"
+}
+
+###
+POST {{baseUrl}}/Bookings(ID={{vampireFullSun.response.body.$.ID}},IsActiveEntity=false)/HotelService.draftActivate
+Authorization: {{auth}}
+Content-Type: application/json
+
+{}
+
+### R2 warn - vampire into a partial room: activation -> 201 + sap-messages warning
+# @name vampirePartial
+POST {{baseUrl}}/Bookings
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "guest_ID": "11111111-1111-1111-1111-000000000001",
+  "room_number": "105",
+  "checkIn": "2027-04-01",
+  "checkOut": "2027-04-04"
+}
+
+###
+POST {{baseUrl}}/Bookings(ID={{vampirePartial.response.body.$.ID}},IsActiveEntity=false)/HotelService.draftActivate
+Authorization: {{auth}}
+Content-Type: application/json
+
+{}
+
+### R3 reject - yeti into a warm room: activation -> 400 TEMP_TOO_WARM
+# @name yetiWarm
+POST {{baseUrl}}/Bookings
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "guest_ID": "11111111-1111-1111-1111-000000000015",
+  "room_number": "207",
+  "checkIn": "2027-05-10",
+  "checkOut": "2027-05-13"
+}
+
+###
+POST {{baseUrl}}/Bookings(ID={{yetiWarm.response.body.$.ID}},IsActiveEntity=false)/HotelService.draftActivate
+Authorization: {{auth}}
+Content-Type: application/json
+
+{}
+
+### R3 ok - yeti into the glacier suite: activation -> 201
+# @name yetiCold
+POST {{baseUrl}}/Bookings
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "guest_ID": "11111111-1111-1111-1111-000000000015",
+  "room_number": "ICE-1",
+  "checkIn": "2027-05-01",
+  "checkOut": "2027-05-04"
+}
+
+###
+POST {{baseUrl}}/Bookings(ID={{yetiCold.response.body.$.ID}},IsActiveEntity=false)/HotelService.draftActivate
+Authorization: {{auth}}
+Content-Type: application/json
+
+{}
+
+### R4 overlap - first booking on room 13: activation -> 201
+# @name firstStay
+POST {{baseUrl}}/Bookings
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "guest_ID": "11111111-1111-1111-1111-000000000004",
+  "room_number": "13",
+  "checkIn": "2027-03-01",
+  "checkOut": "2027-03-04"
+}
+
+###
+POST {{baseUrl}}/Bookings(ID={{firstStay.response.body.$.ID}},IsActiveEntity=false)/HotelService.draftActivate
+Authorization: {{auth}}
+Content-Type: application/json
+
+{}
+
+### R4 overlap - clashing booking on room 13: activation -> 409 ROOM_OVERLAP
+# @name clashStay
+POST {{baseUrl}}/Bookings
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "guest_ID": "11111111-1111-1111-1111-000000000004",
+  "room_number": "13",
+  "checkIn": "2027-03-03",
+  "checkOut": "2027-03-06"
+}
+
+###
+POST {{baseUrl}}/Bookings(ID={{clashStay.response.body.$.ID}},IsActiveEntity=false)/HotelService.draftActivate
+Authorization: {{auth}}
+Content-Type: application/json
+
+{}

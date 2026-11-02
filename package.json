@@ -27,8 +27,8 @@
     "typescript": "^5"
   },
   "scripts": {
-    "start": "cds w",
-    "watch": "cds watch",
+    "start": "cds-tsx w",
+    "watch": "cds-tsx watch",
     "test": "jest",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
