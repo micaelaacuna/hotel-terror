@@ -2,6 +2,19 @@ namespace hotel;
 
 using { cuid, managed, sap.common.CodeList } from '@sap/cds/common';
 
+// ---------- Code value types ----------
+// allowed values for a room's sun exposure and a booking's status
+
+type SunExposure : String(10) enum { none; partial; full; }
+
+type BookingStatusCode : String(20) enum {
+  requested;
+  confirmed;
+  checkedIn;
+  checkedOut;
+  cancelled;
+}
+
 // ---------- Code lists ----------
 
 entity Species : CodeList {
@@ -15,7 +28,7 @@ entity Species : CodeList {
 }
 
 entity BookingStatuses : CodeList {
-  key code  : String(20);
+  key code  : BookingStatusCode;
       color : String(20);
 }
 
@@ -35,7 +48,7 @@ entity Rooms : managed {
   key number      : String(10);  // natural key, e.g. "C-1", "104"
       name        : String(60);
       floor       : Integer;     // negative = crypt/basement
-      sunExposure : String(10) enum { none; partial; full };
+      sunExposure : SunExposure;
       temperature : Integer;     // degrees C
       capacity    : Integer default 1;
       nightlyRate : Decimal(9, 2);

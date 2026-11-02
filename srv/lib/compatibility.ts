@@ -1,24 +1,20 @@
-export type SunExposure = 'none' | 'partial' | 'full';
+import { SunExposure } from '#cds-models/hotel';
+
+// result of a sun check: ok, warn, or reject
 export type SunVerdict = 'ok' | 'warn' | 'reject';
 
-const MS_PER_DAY = 86_400_000;
-
-const atMidnightUTC = (iso: string): number => Date.parse(`${iso.slice(0, 10)}T00:00:00Z`);
-
-// A sun-intolerant guest cannot survive a full-sun room; a partial room is survivable with care.
+// decide whether a guest can take a room given its daylight. A sun-intolerant guest cannot
+// survive full sun (reject); a partial room is survivable but worth a warning.
 export function sunCompatibility(sunTolerant: boolean, sunExposure: SunExposure): SunVerdict {
   if (sunTolerant) return 'ok';
-  if (sunExposure === 'full') return 'reject';
-  if (sunExposure === 'partial') return 'warn';
+  if (sunExposure === SunExposure.full) return 'reject';
+  if (sunExposure === SunExposure.partial) return 'warn';
   return 'ok';
 }
 
-// A null/undefined maxRoomTemp means the species has no upper limit.
+// check the room is not warmer than the species tolerates. A null/undefined maxRoomTemp means
+// the species has no upper limit, so anything passes.
 export function temperatureOk(roomTemp: number, maxRoomTemp: number | null | undefined): boolean {
   if (maxRoomTemp == null) return true;
   return roomTemp <= maxRoomTemp;
-}
-
-export function nightsBetween(checkIn: string, checkOut: string): number {
-  return Math.round((atMidnightUTC(checkOut) - atMidnightUTC(checkIn)) / MS_PER_DAY);
 }

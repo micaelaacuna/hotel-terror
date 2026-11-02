@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import { fullMoonDates, isFullMoonNight, nextFullMoon } from '../srv/lib/lunar';
+import { fullMoonDates, isFullMoonNight, nextFullMoon } from '../../srv/lib/lunar';
 
 const FULL_MOONS_2026 = [
   '2026-01-03', '2026-02-01', '2026-03-03', '2026-04-02', '2026-05-01',

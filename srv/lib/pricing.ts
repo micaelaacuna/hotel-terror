@@ -1,8 +1,6 @@
 import { isFullMoonNight } from './lunar';
-
-const FULL_MOON_SURCHARGE_RATE = 0.35;
-const DEPOSIT_PER_RISK_LEVEL = 50;
-const MS_PER_DAY = 86_400_000;
+import { FULL_MOON_SURCHARGE_RATE, DEPOSIT_PER_RISK_LEVEL, MS_PER_DAY } from './constants';
+import { atMidnightUTC } from './dates';
 
 export interface PriceInput {
   checkIn: string;   // YYYY-MM-DD
@@ -22,10 +20,8 @@ export interface PriceResult {
   totalAmount: number;
 }
 
-// Round to cents; the seeded amounts are stored to 2 decimals, so float drift must not leak in.
-const round2 = (value: number): number => Math.round(value * 100) / 100;
-
-const atMidnightUTC = (iso: string): number => Date.parse(`${iso.slice(0, 10)}T00:00:00Z`);
+// round to cents. Amounts are stored to 2 decimals, so keep float drift from leaking in.
+export const round2 = (value: number): number => Math.round(value * 100) / 100;
 
 export function priceBooking(input: PriceInput): PriceResult {
   const checkInMs = atMidnightUTC(input.checkIn);

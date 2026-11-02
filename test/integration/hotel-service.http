@@ -240,3 +240,103 @@ Authorization: {{auth}}
 Content-Type: application/json
 
 {}
+
+# ----------------------------------------------------------------------------
+# R5 pricing: amounts are computed on activation (full-moon surcharge + deposit).
+# ----------------------------------------------------------------------------
+
+### Werewolf stay spanning the 2026-10-26 full moon
+# @name werewolfStay
+POST {{baseUrl}}/Bookings
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "guest_ID": "11111111-1111-1111-1111-000000000003",
+  "room_number": "C-1",
+  "checkIn": "2026-10-25",
+  "checkOut": "2026-10-28"
+}
+
+###
+POST {{baseUrl}}/Bookings(ID={{werewolfStay.response.body.$.ID}},IsActiveEntity=false)/HotelService.draftActivate
+Authorization: {{auth}}
+Content-Type: application/json
+
+{}
+
+### Read the priced booking: expect nights 3, surcharge 28.00, deposit 200.00, total 268.00
+GET {{baseUrl}}/Bookings(ID={{werewolfStay.response.body.$.ID}},IsActiveEntity=true)
+Authorization: {{auth}}
+
+# ----------------------------------------------------------------------------
+# R7 lifecycle: confirmed -> checkedIn -> checkedOut, and rejected transitions.
+# ----------------------------------------------------------------------------
+
+### Create and activate a booking (defaults to confirmed)
+# @name lifecycleStay
+POST {{baseUrl}}/Bookings
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "guest_ID": "11111111-1111-1111-1111-000000000004",
+  "room_number": "13",
+  "checkIn": "2027-11-01",
+  "checkOut": "2027-11-04"
+}
+
+###
+POST {{baseUrl}}/Bookings(ID={{lifecycleStay.response.body.$.ID}},IsActiveEntity=false)/HotelService.draftActivate
+Authorization: {{auth}}
+Content-Type: application/json
+
+{}
+
+### Check in: confirmed -> checkedIn
+POST {{baseUrl}}/Bookings(ID={{lifecycleStay.response.body.$.ID}},IsActiveEntity=true)/HotelService.checkIn
+Authorization: {{auth}}
+Content-Type: application/json
+
+{}
+
+### Check out: checkedIn -> checkedOut (folds charges and incidents, none here)
+POST {{baseUrl}}/Bookings(ID={{lifecycleStay.response.body.$.ID}},IsActiveEntity=true)/HotelService.checkOut
+Authorization: {{auth}}
+Content-Type: application/json
+
+{}
+
+### Cancel a checked-out booking -> expect 409 CANCEL_BAD_STATE
+POST {{baseUrl}}/Bookings(ID={{lifecycleStay.response.body.$.ID}},IsActiveEntity=true)/HotelService.cancel
+Authorization: {{auth}}
+Content-Type: application/json
+
+{}
+
+### Check out a fresh confirmed booking without checking in -> expect 409 CHECKOUT_BAD_STATE
+# @name badCheckout
+POST {{baseUrl}}/Bookings
+Authorization: {{auth}}
+Content-Type: application/json
+
+{
+  "guest_ID": "11111111-1111-1111-1111-000000000004",
+  "room_number": "13",
+  "checkIn": "2027-11-20",
+  "checkOut": "2027-11-23"
+}
+
+###
+POST {{baseUrl}}/Bookings(ID={{badCheckout.response.body.$.ID}},IsActiveEntity=false)/HotelService.draftActivate
+Authorization: {{auth}}
+Content-Type: application/json
+
+{}
+
+###
+POST {{baseUrl}}/Bookings(ID={{badCheckout.response.body.$.ID}},IsActiveEntity=true)/HotelService.checkOut
+Authorization: {{auth}}
+Content-Type: application/json
+
+{}

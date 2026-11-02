@@ -1,6 +1,5 @@
 import { SearchMoonQuarter, NextMoonQuarter } from 'astronomy-engine';
-
-const FULL_MOON = 2;
+import { FULL_MOON_QUARTER } from './constants';
 
 const pad2 = (n: number): string => String(n).padStart(2, '0');
 
@@ -12,7 +11,8 @@ const toISOInput = (date: Date | string): string =>
 
 const datesByYear = new Map<number, string[]>();
 
-/** ISO `YYYY-MM-DD` full-moon dates (UTC) that fall in the given year, ascending. */
+// walk the moon quarters and collect the full-moon dates (ISO YYYY-MM-DD, UTC) that land
+// in the given year, ascending. Results are cached per year since the scan is not free.
 export function fullMoonDates(year: number): string[] {
   const cached = datesByYear.get(year);
   if (cached) return cached;
@@ -23,7 +23,7 @@ export function fullMoonDates(year: number): string[] {
     const date = mq.time.date;
     const mqYear = date.getUTCFullYear();
     if (mqYear > year) break;
-    if (mqYear === year && mq.quarter === FULL_MOON) dates.push(toISO(date));
+    if (mqYear === year && mq.quarter === FULL_MOON_QUARTER) dates.push(toISO(date));
     mq = NextMoonQuarter(mq);
   }
 
@@ -31,19 +31,14 @@ export function fullMoonDates(year: number): string[] {
   return dates;
 }
 
-/**
- * A night starting on date `D` counts as a full-moon night when `D` is one of the
- * computed full-moon dates. The brief models the window as `[D 12:00 UTC, D+1 12:00 UTC)`;
- * collapsing it to the calendar date reproduces the published UTC full-moon dates and the
- * seeded booking amounts, and is all the surcharge rule needs.
- */
+// a night counts as a full-moon night when its start date is a computed full-moon date
 export function isFullMoonNight(date: Date | string): boolean {
   const iso = toISOInput(date);
   const year = Number(iso.slice(0, 4));
   return fullMoonDates(year).includes(iso);
 }
 
-/** First full-moon date on or after `fromDate`, as a UTC-midnight Date. */
+// the first full-moon date on or after fromDate, as a UTC-midnight Date
 export function nextFullMoon(fromDate: Date): Date {
   const fromISO = toISOInput(fromDate);
   const startYear = Number(fromISO.slice(0, 4));

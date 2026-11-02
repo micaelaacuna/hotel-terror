@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import { overlaps } from '../srv/lib/overlap';
+import { overlaps } from '../../srv/lib/overlap';
 
 describe('overlaps', () => {
   it('does not overlap when one stay ends the day the next begins', () => {

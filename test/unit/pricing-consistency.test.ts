@@ -1,7 +1,7 @@
 import { describe, it, expect } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { priceBooking } from '../srv/lib/pricing';
+import { priceBooking } from '../../srv/lib/pricing';
 
 // The seeded booking amounts and the live pricing must never drift; recompute every row to prove it.
 
@@ -23,10 +23,10 @@ function readCsv(...segments: string[]): Row[] {
 
 describe('seeded booking amounts', () => {
   it('match priceBooking for every mock booking', () => {
-    const rooms = readCsv('data', 'hotel-Rooms.csv');
-    const guests = readCsv('data', 'hotel-Guests.csv');
-    const species = readCsv('..', 'db', 'data', 'hotel-Species.csv');
-    const bookings = readCsv('data', 'hotel-Bookings.csv');
+    const rooms = readCsv('..', 'data', 'hotel-Rooms.csv');
+    const guests = readCsv('..', 'data', 'hotel-Guests.csv');
+    const species = readCsv('..', '..', 'db', 'data', 'hotel-Species.csv');
+    const bookings = readCsv('..', 'data', 'hotel-Bookings.csv');
 
     const rateByRoom = new Map(rooms.map((r) => [r.number, Number(r.nightlyRate)]));
     const speciesByGuest = new Map(guests.map((g) => [g.ID, g.species_code]));

@@ -1,5 +1,6 @@
 import { describe, it, expect } from '@jest/globals';
-import { sunCompatibility, temperatureOk, nightsBetween } from '../srv/lib/compatibility';
+import { sunCompatibility, temperatureOk } from '../../srv/lib/compatibility';
+import { nightsBetween } from '../../srv/lib/dates';
 
 describe('sunCompatibility', () => {
   it('clears a sun-tolerant guest in any room', () => {

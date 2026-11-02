@@ -5,7 +5,11 @@ service HotelService @(path: '/hotel', requires: 'authenticated-user') {
 
   @odata.draft.enabled
   @cds.redirection.target
-  entity Bookings  as projection on hotel.Bookings;
+  entity Bookings  as projection on hotel.Bookings actions {
+    action checkIn();
+    action checkOut();
+    action cancel();
+  };
 
   @odata.draft.enabled
   entity Guests    as projection on hotel.Guests;

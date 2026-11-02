@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import { priceBooking } from '../srv/lib/pricing';
+import { priceBooking } from '../../srv/lib/pricing';
 
 describe('priceBooking', () => {
   it('charges the full-moon surcharge for a sensitive species', () => {
