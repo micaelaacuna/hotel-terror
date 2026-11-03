@@ -13,7 +13,7 @@ const sum = (rows: Record<string, unknown>[], field: string): number =>
 
 // the active booking id. Actions run on the active row, so take the last param to skip the
 // draft IsActiveEntity key.
-const activeId = (req: cds.Request): string => (req.params.at(-1) as { ID: string }).ID;
+export const activeId = (req: cds.Request): string => (req.params.at(-1) as { ID: string }).ID;
 
 // move a booking to nextStatus only if it is currently in one of allowedFrom, else 409.
 // The write goes straight to the DB layer so it does not re-trigger the Booking validation
@@ -42,7 +42,7 @@ export function cancel(req: cds.Request): Promise<void> {
   return transition(req, CANCEL_FROM, BookingStatusCode.cancelled, 'CANCEL_BAD_STATE');
 }
 
-// check out a staying guest: fold any charges and incidents onto the R5 room+surcharge base,
+// check out a staying guest: fold any charges and incidents onto the room+surcharge base,
 // then store the final total and flip the status.
 export async function checkOut(req: cds.Request): Promise<void> {
   const ID = activeId(req);

@@ -29,8 +29,8 @@ interface SpeciesRow {
   riskLevel: number;
 }
 
-// runs before every Booking CREATE/UPDATE. Enforces the booking rules R1-R5 and, when the
-// booking inputs change, repasses the computed amounts back onto req.data so they get persisted.
+// runs before every Booking CREATE/UPDATE. enforces the booking rules and, when the booking
+// inputs change, writes the recomputed amounts back onto req.data so they persist.
 export async function validateBooking(req: cds.Request): Promise<void> {
   const data = req.data as BookingData;
   let { checkIn, checkOut, room_number, guest_ID } = data;
@@ -54,7 +54,7 @@ export async function validateBooking(req: cds.Request): Promise<void> {
 
   if (!checkIn || !checkOut || !room_number || !guest_ID) return;
 
-  // R1 stay length, 1 to 30 nights
+  // stay length, 1 to 30 nights
   const nights = nightsBetween(checkIn, checkOut);
   if (nights < MIN_NIGHTS || nights > MAX_NIGHTS) {
     return req.reject(400, 'STAY_LENGTH', 'checkOut');
@@ -67,7 +67,7 @@ export async function validateBooking(req: cds.Request): Promise<void> {
     : undefined;
 
   if (room && species) {
-    // R2 sun-intolerant guests can't take a full-sun room, partial only warns
+    // sun-intolerant guests can't take a full-sun room, partial only warns
     const verdict = sunCompatibility(species.sunTolerant, room.sunExposure);
     if (verdict === 'reject') {
       return req.reject(400, 'SUN_INCOMPATIBLE', 'room', [room_number]);
@@ -76,13 +76,13 @@ export async function validateBooking(req: cds.Request): Promise<void> {
       req.warn({ message: 'SUN_PARTIAL_WARNING', args: [room_number] });
     }
 
-    // R3 room can't be warmer than the species tolerates
+    // room can't be warmer than the species tolerates
     if (!temperatureOk(room.temperature, species.maxRoomTemp)) {
       return req.reject(400, 'TEMP_TOO_WARM', 'room', [room_number]);
     }
   }
 
-  // R4 room must be free, no overlapping live booking
+  // room must be free, no overlapping live booking
   const where: Record<string, unknown> = { room_number, status_code: { '!=': BookingStatusCode.cancelled } };
   if (ID != null) where.ID = { '!=': ID };
   const others = (await SELECT.from(Bookings).columns('ID', 'checkIn', 'checkOut').where(where)) as { checkIn: string; checkOut: string }[];
@@ -91,7 +91,7 @@ export async function validateBooking(req: cds.Request): Promise<void> {
     return req.reject(409, 'ROOM_OVERLAP', undefined, [room_number]);
   }
 
-  // R5 price the stay and persist the amounts
+  // price the stay and persist the amounts
   if (pricingInputChanged && room) {
     Object.assign(
       req.data,

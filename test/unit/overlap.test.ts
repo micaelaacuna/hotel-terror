@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import { overlaps } from '../../srv/lib/overlap';
+import { overlaps, coversDate } from '../../srv/lib/overlap';
 
 describe('overlaps', () => {
   it('does not overlap when one stay ends the day the next begins', () => {
@@ -22,5 +22,24 @@ describe('overlaps', () => {
 
   it('detects a same-day single-night clash', () => {
     expect(overlaps('2026-07-10', '2026-07-11', '2026-07-10', '2026-07-11')).toBe(true);
+  });
+});
+
+describe('coversDate', () => {
+  it('covers the check-in night', () => {
+    expect(coversDate('2026-07-10', '2026-07-14', '2026-07-10')).toBe(true);
+  });
+
+  it('covers a night in the middle of the stay', () => {
+    expect(coversDate('2026-07-10', '2026-07-14', '2026-07-13')).toBe(true);
+  });
+
+  it('does not cover the check-out day', () => {
+    expect(coversDate('2026-07-10', '2026-07-14', '2026-07-14')).toBe(false);
+  });
+
+  it('does not cover a date before or after the stay', () => {
+    expect(coversDate('2026-07-10', '2026-07-14', '2026-07-09')).toBe(false);
+    expect(coversDate('2026-07-10', '2026-07-14', '2026-07-20')).toBe(false);
   });
 });

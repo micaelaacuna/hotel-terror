@@ -42,6 +42,20 @@ service HotelService @(path: '/hotel', requires: 'authenticated-user') {
   @readonly entity RevenueVsTarget    as projection on analytics.RevenueVsTarget;
   @readonly entity IncidentsBySpecies as projection on analytics.IncidentsBySpecies;
   @readonly entity RoomRanking        as projection on analytics.RoomRanking;
+
+  // dashboard reads, computed by handlers
+  function occupancy(period : String(7)) returns {
+    occupiedRoomNights  : Integer;
+    availableRoomNights : Integer;
+    rate                : Decimal(5, 2);
+    target              : Decimal(5, 2);
+  };
+
+  function nextFullMoon() returns {
+    date                  : Date;
+    sensitiveGuestsBooked : Integer;
+    surchargePct          : Integer;
+  };
 }
 
 // amounts are computed by service handlers, never set by clients
