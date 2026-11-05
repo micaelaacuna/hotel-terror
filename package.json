@@ -9,7 +9,8 @@
   "dependencies": {
     "@cap-js/postgres": "^3",
     "@sap/cds": "^10",
-    "astronomy-engine": "^2.1.19"
+    "astronomy-engine": "^2.1.19",
+    "@sap/xssec": "^4"
   },
   "devDependencies": {
     "@cap-js/cds-test": "^1.0.2",
@@ -27,12 +28,17 @@
     "typescript": "^5"
   },
   "scripts": {
-    "start": "cds-tsx w",
+    "start": "cds-serve",
     "watch": "cds-tsx watch",
     "test": "jest",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "login": "cf login -a https://api.cf.us10-001.hana.ondemand.com --sso"
+    "build": "mbt build",
+    "deploy": "cf deploy mta_archives/hotel-terror_1.0.0.mtar",
+    "db:tunnel": "bash scripts/pg-tunnel.sh",
+    "db:shell": "bash scripts/db-shell.sh",
+    "hybrid": "bash scripts/pg-hybrid.sh",
+    "db:reset": "bash scripts/db-reset.sh"
   },
   "private": true,
   "imports": {

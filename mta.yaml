@@ -1,0 +1,65 @@
+_schema-version: 3.3.0
+ID: hotel-terror
+version: 1.0.0
+description: "Reception desk app for a hotel of classic monsters, built on CAP, TypeScript and PostgreSQL."
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+modules:
+  - name: hotel-terror-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      instances: 1
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm-ci
+    provides:
+      - name: srv-api # consumed by the managed App Router added in a later phase
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: hotel-terror-auth
+      - name: hotel-terror-db
+
+  - name: hotel-terror-db-deployer
+    type: nodejs
+    path: gen/pg
+    parameters:
+      buildpack: nodejs_buildpack
+      no-route: true
+      no-start: true
+      tasks:
+        - name: deploy-to-postgresql
+          command: npm start
+    requires:
+      - name: hotel-terror-db
+
+resources:
+  - name: hotel-terror-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: hotel-terror
+        tenant-mode: dedicated
+        oauth2-configuration:
+          credential-types:
+            - "binding-secret"
+            - "x509"
+  # Trial plan: no public endpoint, so the DB is reached over a cf ssh tunnel.
+  # To move to a paid plan, set service-plan to standard or premium on a PAYG/CPEA
+  # account and add a config block with public_access: true and
+  # allow_access: "<your-ip-cidr>" for a direct IP-allowlisted endpoint, no tunnel needed.
+  - name: hotel-terror-db
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: postgresql-db
+      service-plan: trial
